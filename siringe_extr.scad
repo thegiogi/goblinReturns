@@ -1,15 +1,17 @@
 include <shortcuts.scad>
 include <scad_utils\morphology.scad>
+include <Bracket.scad>
+//include <StepMotor.scad>
 x=[1,0,0];
 y=[0,1,0];
 z=[0,0,1];
 //side wall
 R_wall=30;
-l_wall=70;
+l_wall=30;
 syr_flap_w=3;
 syr_flap_h=20;
 wall_th=5;
-syr_len_to_flaps=80;
+syr_len_to_flaps=30;
 round_r=5;
 module side()
 {
@@ -52,21 +54,19 @@ U(){
 sidesandbottom();
 
 //aggiungiamo la base per il motore
-mot_base_len=50;
-mot_base_w=90;
+mot_base_len=100;
+mot_base_w=Bdia;
 module mot_base(){
-Tx(mot_base_len/2+l_wall-round_r/2)Ty(-mot_base_w/2+tot_w/2)l_e(wall_th)rounding(round_r)Sq(mot_base_len+round_r,mot_base_w);
+Tx(mot_base_len/2+l_wall-round_r/2)l_e(wall_th)rounding(round_r)Sq(mot_base_len+round_r,mot_base_w);
 }
 mot_base();
 
 //qui c'è la montatura specifica per il byj48
-by_hol_h=16.5;
-by_hol_x=31/2;
-extra=5;
-module byj_m_mount(){
-D(){
-    Sq(by_hol_x*2+2*extra,by_hol_h);
-    //Ty(0.6*by_w/2)Ci(0.6*by_w/2);
-    Tx(by_hol_x)Ty()Ci(2);
-}
+
+//Tx(R_wall+l_wall)Tz(MBD/2+wall_th)Ry(90)Rz(0)StepMotor28BYJ();
+Tx(l_wall+mot_base_len)Tz(MBFNW2+wall_th)Ry(90){
+    
+    rotate([180,0,0]) bracket();  // show the motor bracket
+rotate([180,0,0])translate([0,0,-MBH/2]) 
+ rotate([180,0,0]) StepMotor28BYJ();
 }
