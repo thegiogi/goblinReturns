@@ -1,6 +1,7 @@
 include <shortcuts.scad>
 include <scad_utils\morphology.scad>
 include <Bracket.scad>
+include <syringe.scad>
 //include <StepMotor.scad>
 x=[1,0,0];
 y=[0,1,0];
@@ -9,10 +10,11 @@ z=[0,0,1];
 R_wall=30;
 l_wall=30;
 syr_flap_w=3;
-syr_flap_h=20;
+syr_flap_h=2*syr_flap_r;
 wall_th=5;
 syr_len_to_flaps=30;
 round_r=5;
+syr_axis_h=R_wall-syr_flap_h/2;
 module side()
 {
     l_e(wall_th)
@@ -57,16 +59,23 @@ sidesandbottom();
 mot_base_len=100;
 mot_base_w=Bdia;
 module mot_base(){
-Tx(mot_base_len/2+l_wall-round_r/2)l_e(wall_th)rounding(round_r)Sq(mot_base_len+round_r,mot_base_w);
+Tx(mot_base_len/2+l_wall-round_r/2){
+    l_e(wall_th)rounding(round_r)Sq(mot_base_len+round_r,mot_base_w);
+    Tx(mot_base_len/2-10)Tz((MBD/2-SBO-MTH)/2+wall_th)Cu(18,Bdia,MBD/2-SBO-MTH);
+}
+
 }
 mot_base();
 
 //qui c'è la montatura specifica per il byj48
 
 //Tx(R_wall+l_wall)Tz(MBD/2+wall_th)Ry(90)Rz(0)StepMotor28BYJ();
-Tx(l_wall+mot_base_len)Tz(MBFNW2+wall_th)Ry(90){
+Tx(l_wall+mot_base_len-20)Tz(MBFNW2+wall_th+MBD/2-SBO-MTH)Ry(90){
     
     rotate([180,0,0]) bracket();  // show the motor bracket
 rotate([180,0,0])translate([0,0,-MBH/2]) 
  rotate([180,0,0]) StepMotor28BYJ();
 }
+
+//aggiungo la siringa. nota che alcuni parametri della siringa sono ora parte di questo modello, ma non tutti! bisogna collegare lo spessore della fessura e altri parametri.
+Tz(syr_OD)Tx(-syr_body_h/2+syr_flap_th)Ry(-90)Rz(90)syringe();
