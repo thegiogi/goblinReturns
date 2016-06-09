@@ -1,0 +1,3 @@
+$(FULL_CURRENT_PATH)
+@pause
+

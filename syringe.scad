@@ -7,7 +7,7 @@ pis_OD=18;
 pis_body_h=80;
 syr_flap_th=3;
 syr_flap_r=10;
-module syringe(){
+module syringe(c){
 //main body
 minkowski(){
 Cy(syr_OD/2-1   , syr_body_h-1);
@@ -21,7 +21,7 @@ Tx(syr_OD/2)Ci(syr_flap_r);
 Tx(-syr_OD/2)Ci(syr_flap_r);
 }
 //piston
-Tz(-syr_body_h/2){
+Tz(-syr_body_h-c){
     minkowski(){
     Cy(pis_OD/2-1   , pis_body_h-1);
     Sp(0.5);
